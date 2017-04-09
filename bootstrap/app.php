@@ -1,8 +1,7 @@
 <?php
 
 session_start();
-
-
+require __DIR__ . '/../vendor/autoload.php';
 
 use Slim\App;
 use Slim\Views\Twig;
@@ -12,11 +11,12 @@ use App\Controllers\Auth\AuthController;
 use Illuminate\Database\Capsule\Manager as Capsule;
 use App\Validation\Validator;
 
-require __DIR__ . '/../vendor/autoload.php';
 
 $app = new App([
   'settings' => [
+    'determineRouteBeforeAppMiddleware' => true,
     'displayErrorDetails' => true,
+    'addContentLengthHeader' => false,
     'db' => [
       'driver' => 'mysql',
       'host' => 'localhost',
@@ -77,6 +77,5 @@ $container['AuthController'] = function ($container) {
   return new AuthController($container);
 };
 
-
-
+$app->add(new \App\Middleware\ValidationErrorMiddleware($container));
 require __DIR__ . '/../app/routes.php';
