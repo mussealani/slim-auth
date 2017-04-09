@@ -3,12 +3,14 @@
 session_start();
 
 
+
 use Slim\App;
 use Slim\Views\Twig;
 use Slim\Views\TwigExtension;
 use App\Controllers\HomeController;
 use App\Controllers\Auth\AuthController;
 use Illuminate\Database\Capsule\Manager as Capsule;
+use App\Validation\Validator;
 
 require __DIR__ . '/../vendor/autoload.php';
 
@@ -61,6 +63,10 @@ $container['view'] = function ($container) {
   $view->addExtension(new Twig_Extension_Debug());
 
   return $view;
+};
+
+$container['validator'] = function ($container) {
+  return new Validator();
 };
 
 $container['HomeController'] = function ($container) {
