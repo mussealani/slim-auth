@@ -10,6 +10,7 @@ use App\Controllers\HomeController;
 use App\Controllers\Auth\AuthController;
 use Illuminate\Database\Capsule\Manager as Capsule;
 use App\Validation\Validator;
+use Respect\Validation\Validator as v;
 
 
 $app = new App([
@@ -78,4 +79,8 @@ $container['AuthController'] = function ($container) {
 };
 
 $app->add(new \App\Middleware\ValidationErrorMiddleware($container));
+$app->add(new \App\Middleware\OldInputMiddleware($container));
+
+v::with('App\\Validation\\Rules\\', true);
+
 require __DIR__ . '/../app/routes.php';
