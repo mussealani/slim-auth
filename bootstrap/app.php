@@ -49,6 +49,14 @@ $container['db'] = function ($container) use ($capsule) {
 
 /**
  * @param $container
+ * @return \App\Auth\Auth
+ */
+$container['auth'] = function ($container) {
+  return new \App\Auth\Auth;
+};
+
+/**
+ * @param $container
  * @return Twig
  */
 $container['view'] = function ($container) {
@@ -60,6 +68,11 @@ $container['view'] = function ($container) {
     $container->router,
     $container->request->getUri()
   ));
+
+  $view->getEnvironment()->addGlobal('auth', [
+    'check' => $container->auth->check(),
+    'user' => $container->auth->user(),
+  ]);
 
   $view->addExtension(new Twig_Extension_Debug());
 
@@ -77,6 +90,7 @@ $container['HomeController'] = function ($container) {
 $container['AuthController'] = function ($container) {
   return new AuthController($container);
 };
+
 
 $container['csrf'] = function ($container) {
   return new \Slim\Csrf\Guard;

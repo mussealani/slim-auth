@@ -9,6 +9,37 @@ use Respect\Validation\Validator as v;
 
 class AuthController extends Controller
 {
+
+  public function getSignOut($req, $res)
+  {
+    $this->auth->logout();
+    return $res->withRedirect($this->router->pathFor('home'));
+  }
+
+  /**
+   * @param $req
+   * @param $res
+   * @return mixed
+   */
+  public function getSignIn($req, $res)
+  {
+    return $this->view->render($res, 'auth/signin.twig');
+  }
+
+  public function postSignIn($req, $res)
+  {
+    $auth = $this->auth->attempt(
+      $req->getParam('email'),
+      $req->getParam('password')
+    );
+
+    if (!$auth) {
+      return $res->withRedirect($this->router->pathFor('auth.signin'));
+    }
+
+    return $res->withRedirect($this->router->pathFor('home'));
+  }
+
   /**
    * @param $req
    * @param $res
@@ -20,7 +51,9 @@ class AuthController extends Controller
   }
 
   /**
-   *
+   * @param $req
+   * @param $res
+   * @return mixed
    */
   public function postSignUp($req, $res)
   {
@@ -39,6 +72,8 @@ class AuthController extends Controller
       'name' => $req->getParam('name'),
       'password' => password_hash( $req->getParam('password'), PASSWORD_DEFAULT ),
     ]);
+
+    $this->auth->attempt($user->email, $req->getParam('password'));
    return $res->withRedirect($this->router->pathFor('home'));
   }
 }
