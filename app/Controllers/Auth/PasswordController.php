@@ -34,5 +34,8 @@ class PasswordController extends Controller
 
       return $res->withRedirect($this->router->pathFor('auth.password.change'));
     }
+    $this->auth->user()->setPassword($req->getParam('password'));
+    $this->flash->addMessage('info', 'Your password has been changed');
+    return $res->withRedirect($this->router->pathFor('home'));
   }
 }
