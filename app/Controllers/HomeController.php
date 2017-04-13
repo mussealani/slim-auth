@@ -15,7 +15,7 @@ class HomeController extends Controller
    */
   public function index($req, $res)
   {
-
+    $this->flash->addMessage('global', 'Test flash message');
     return $this->view->render($res, 'home.twig');
   }
 }

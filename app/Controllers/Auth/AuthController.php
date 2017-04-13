@@ -34,8 +34,11 @@ class AuthController extends Controller
     );
 
     if (!$auth) {
+      $this->flash->addMessage('error', 'Could not sign you in with those details!');
       return $res->withRedirect($this->router->pathFor('auth.signin'));
     }
+
+    $this->flash->addMessage('info', 'You have been signed in!');
 
     return $res->withRedirect($this->router->pathFor('home'));
   }
@@ -72,6 +75,8 @@ class AuthController extends Controller
       'name' => $req->getParam('name'),
       'password' => password_hash( $req->getParam('password'), PASSWORD_DEFAULT ),
     ]);
+
+    $this->flash->addMessage('info', 'You have been signed up!');
 
     $this->auth->attempt($user->email, $req->getParam('password'));
    return $res->withRedirect($this->router->pathFor('home'));

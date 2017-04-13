@@ -8,6 +8,7 @@ use Slim\Views\Twig;
 use Slim\Views\TwigExtension;
 use App\Controllers\HomeController;
 use App\Controllers\Auth\AuthController;
+use App\Controllers\Auth\PasswordController;
 use Illuminate\Database\Capsule\Manager as Capsule;
 use App\Validation\Validator;
 use Respect\Validation\Validator as v;
@@ -57,6 +58,14 @@ $container['auth'] = function ($container) {
 
 /**
  * @param $container
+ * @return \Slim\Flash\Messages
+ */
+$container['flash'] = function ($container) {
+  return new \Slim\Flash\Messages;
+};
+
+/**
+ * @param $container
  * @return Twig
  */
 $container['view'] = function ($container) {
@@ -75,6 +84,7 @@ $container['view'] = function ($container) {
   ]);
 
   $view->addExtension(new Twig_Extension_Debug());
+  $view->getEnvironment()->addGlobal('flash', $container->flash);
 
   return $view;
 };
@@ -89,6 +99,10 @@ $container['HomeController'] = function ($container) {
 
 $container['AuthController'] = function ($container) {
   return new AuthController($container);
+};
+
+$container['PasswordController'] = function ($container) {
+  return new PasswordController($container);
 };
 
 
