@@ -13,6 +13,10 @@ use Illuminate\Database\Capsule\Manager as Capsule;
 use App\Validation\Validator;
 use Respect\Validation\Validator as v;
 
+// Load dotenv variables.
+$dotenv = new Dotenv\Dotenv('../');
+$dotenv->load();
+
 
 $app = new App([
   'settings' => [
@@ -20,14 +24,14 @@ $app = new App([
     'displayErrorDetails' => true,
     'addContentLengthHeader' => false,
     'db' => [
-      'driver' => 'mysql',
-      'host' => 'localhost',
-      'database' => 'slim-auth',
-      'username' => 'root',
-      'password' => '',
-      'charset' => 'utf8',
-      'collation' => 'utf8_unicode_ci',
-      'prefix' => '',
+      'driver' => getenv('DRIVER'),
+      'host' => getenv('HOST'),
+      'database' => getenv('DATABASE'),
+      'username' => getenv('USERNAME'),
+      'password' => getenv('PASSWORD'),
+      'charset' => getenv('CHARESET'),
+      'collation' => getenv('COLLATION'),
+      'prefix' => getenv('PREFIX'),
     ]
   ]
 ]);
